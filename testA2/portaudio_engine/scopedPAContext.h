@@ -10,13 +10,20 @@ class AudioStream
     friend class ScopedPAContext;
 
 private:
-    unsigned int        _samplerate, _buffersize;
-    PaStreamParameters  _pars;
+    unsigned int        _samplerate, _buffersize, _channelcount;
+    PaSampleFormat      _sampleformat;
 
     bool                _isplaying;
 
 public:
-    bool                setDefaultConfig();
+    AudioStream();
+    AudioStream(unsigned int samplerate = 44100,
+                unsigned int channels = 2,
+                PaSampleFormat sampleformat = paFloat32,
+                unsigned int buffersize = 64);
+
+    bool        setDefaultConfig();
+    virtual int audioCallback(void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags) = 0;
 };
 
 /**
@@ -28,8 +35,15 @@ class ScopedPAContext
 private:
     PaDeviceIndex       _defaultoutput;
     PaError             _result;
+    PaStreamParameters  _strparams;
 
     AudioStream*        _currentstream;
+
+    static int          audioCallback(const void *inputBuffer, void *outputBuffer,
+                                           unsigned long framesPerBuffer,
+                                           const PaStreamCallbackTimeInfo* timeInfo,
+                                           PaStreamCallbackFlags statusFlags,
+                                           void *userData);
 
 public:
     /**

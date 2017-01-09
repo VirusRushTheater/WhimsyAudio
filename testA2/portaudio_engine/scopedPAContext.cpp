@@ -1,15 +1,23 @@
 #include "scopedPAContext.h"
 
+AudioStream::AudioStream()
+{
+    setDefaultConfig();
+}
+
+AudioStream::AudioStream(unsigned int samplerate, unsigned int channels, PaSampleFormat sampleformat, unsigned int buffersize) :
+    _samplerate(samplerate),
+    _channelcount(channels),
+    _sampleformat(sampleformat),
+    _buffersize(buffersize)
+{
+}
 
 bool AudioStream::setDefaultConfig()
 {
-    _pars.device =                      _defaultoutput;
-
     // Stereo, Float32 samples, with minimum latency.
-    _pars.channelCount =                2;
-    _pars.sampleFormat =                paFloat32;
-    _pars.suggestedLatency =            Pa_GetDeviceInfo(_defaultoutput)->defaultLowOutputLatency;
-    _pars.hostApiSpecificStreamInfo =   NULL;
+    _channelcount =                     2;
+    _sampleformat =                     paFloat32;
 
     // Default sample rate and buffer size.
     _samplerate =                       44100;
@@ -30,8 +38,10 @@ ScopedPAContext::ScopedPAContext() :
     _defaultoutput =                    Pa_GetDefaultOutputDevice();
     if (_defaultoutput == paNoDevice) {
         throw whimsycore::Exception(NULL, whimsycore::Exception::PortAudioNoDevices, "No default output device.");
-        return false;
     }
+
+    _strparams.suggestedLatency =       Pa_GetDeviceInfo(_defaultoutput)->defaultLowOutputLatency;
+    _strparams.hostApiSpecificStreamInfo =  NULL;
 }
 
 ScopedPAContext::~ScopedPAContext()
@@ -42,7 +52,21 @@ ScopedPAContext::~ScopedPAContext()
     }
 }
 
+void ScopedPAContext::setStream(AudioStream &as)
+{
+    _strparams.channelCount =   as._channelcount;
+    _strparams.sampleFormat =   as._sampleformat;
+
+    _currentstream = &as;
+}
+
 PaError ScopedPAContext::result() const
 {
     return _result;
+}
+
+int ScopedPAContext::audioCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags, void *userData)
+{
+    (void) inputBuffer;
+    return dynamic_cast<AudioStream*>(userData)->audioCallback(outputBuffer, framesPerBuffer, timeInfo, statusFlags);
 }
