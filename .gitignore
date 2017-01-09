@@ -1,0 +1,5 @@
+/portaudio
+/build
+/docs/html
+*.user
+*.autosave

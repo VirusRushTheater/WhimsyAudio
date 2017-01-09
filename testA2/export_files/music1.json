@@ -1,0 +1,113 @@
+{
+    "system":
+    {
+        "preset": "nes-2a03.wtp"
+    },
+    
+    "patches":
+    {
+        "immutable": false,
+        "patch":
+        [
+            {
+            "index": 0,
+            "name": "Example",
+            "type": "square-wave-2a03",
+            
+            "volume": [15, 2, 3, 4, 5, 6],
+            "pitch": [0],
+            "finepitch": [],
+            "dutycycle": [0, 1, 0, 2]
+            },
+            {
+            "index": 1,
+            "name": "Example 2",
+            "type": "dpcm-2a03",
+            "sample": 1
+            }
+        ]
+    },
+    
+    "samples":
+    {
+        "immutable": false,
+        "sample":
+        [
+            {
+            "index": 0,
+            "name": "DPCM 1",
+            "type": "NES-DPCM",
+            "data": "#5dAUkGbAOS8VvQ+AetqAF+wSQPisAoQOmSz2hkpQ3TifA+nJPcZV2mdpoa3dQ57g5CiRJbLt7gqg
+                NReae5FjzE0n/bsGlljmmQNsMXZ8L4kTV4qhZepLkkyHjOw7J6RVpN3jNZ9pB2WGuig0HXDB5JFf
+                0VkTvVlapkp5W1apzoiXLEojAc7uSFBjr48S8mcEZKl04IcTXT0qUzQPWfMuMi2dtRdGFJ9ke0W/
+                pmFBwVyWrlFF0E2LzToxVjjgnnvHDT5nHWjLNaGoUphGhZmJgGZsTfPpTaqBcZ8m3oSsDxRVUNUz
+                tx0+SBYyAM0VQOTUDk/LL9acfb9giN+s6FLMaR6a8cOQcPH0T2vTMg3QpFWFAXEcTfDkQxnX5tNr
+                w+1l8agbybQXM+T1bqXbiHShrfHiKNAje5GAerb9hlNBYHtkc5ikjSbmKCQLIRYootj8VZAOZfav
+                gO7QPC+2ejvESIXFn7yMteMHEiHaZmdn8zI+gyTbZLQBRBzHbAMSjM2XzCuhW9nuR4Xvr4Y7zA2+"
+            }
+        ]
+    },
+    
+    "songs":
+    [
+        {
+        "name": "Song 1",
+        "tempo": 150,
+        "metadata":
+        {
+            "basetempo": 150,
+            "divider": 6
+        },
+        "map":
+        {
+            "frame-cols":
+            {
+                "SQ01": 0, "SQ02": 1, "TRI": 2, "NOI": 3, "DPCM": 4
+            }
+            "frame":
+            [
+                [1, 0, null, null, null],
+                [0, null, null, null, null],
+                [1, null, null, null, null],
+            ]
+        },
+        "patterns":
+        {
+            "pattern-cols":
+            {
+                "SQ01": {"NOTE": 0, "PAT": 1, "VOL": 2, "DC": 3, "FX": 4},
+                "SQ02": {"NOTE": 0, "PAT": 1, "VOL": 2, "DC": 3, "FX": 4}
+            },
+            "SQ01":
+            [
+                [
+                    ["@C-4", 0, 15, 0, "G0,G2 00"],
+                    ["@C#4", 0, 15, 0, "G0,G2 00"],
+                    ["@D-4", 0, 15, 0, "G0,G2 00"],
+                    ["@D#4", 0, 15, 0, "G0,G2 00"]
+                ],
+                [
+                    ["@C-4", 0, 15, 0, "G0,G2 00"],
+                    ["@C#4", 0, 15, 0, "G0,G2 00"]
+                ]
+            ],
+            
+            "SQ02":
+            [
+                [
+                    ["@C-4", 0, 15, 0, "G0,G2 00"],
+                    ["@C#4", 0, 15, 0, "G0,G2 00"],
+                    ["@D-4", 0, 15, 0, "G0,G2 00"],
+                    ["@D#4", 0, 15, 0, "G0,G2 00"]
+                ]
+            ]
+            
+        }
+        
+        }
+    ],
+    
+    "metadata":
+    {
+    }
+}
