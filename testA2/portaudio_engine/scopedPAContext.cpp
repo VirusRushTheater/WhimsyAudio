@@ -1,4 +1,5 @@
 #include "scopedPAContext.h"
+#include "metronometest.h"
 
 ScopedPAContext::ScopedPAContext() :
     _result(Pa_Initialize())
@@ -36,12 +37,12 @@ PaError ScopedPAContext::result() const
     return _result;
 }
 
-void ScopedPAContext::setStream(AudioStream &as)
+void ScopedPAContext::setStream(AudioStream& astream)
 {
-    _as = &(as);
+    _as = &astream;
 
-    _strpars.channelCount =     as._channels;
-    _strpars.sampleFormat =     as._sampleformat;
+    _strpars.channelCount =     _as->_channels;
+    _strpars.sampleFormat =     _as->_sampleformat;
 
     if(_stream != NULL)
     {
@@ -49,8 +50,8 @@ void ScopedPAContext::setStream(AudioStream &as)
         closeStream();
     }
 
-    Pa_OpenStream(&_stream, NULL, &_strpars, (double)as._samplerate, paFramesPerBufferUnspecified,
-                  paClipOff, ScopedPAContext::apiCallback, this->_as);
+    Pa_OpenStream(&_stream, NULL, &_strpars, (double)_as->_samplerate, paFramesPerBufferUnspecified,
+                  paClipOff, ScopedPAContext::apiCallback, _as);
 }
 
 bool ScopedPAContext::startStream(unsigned int timeout_ms)

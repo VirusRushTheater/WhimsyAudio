@@ -22,7 +22,7 @@ public:
     ScopedPAContext();
     ~ScopedPAContext();
 
-    void    setStream(AudioStream& as);
+    void    setStream(AudioStream& astream);
     bool    startStream(unsigned int timeout_ms = 0);
     bool    stopStream();
     bool    closeStream();

@@ -6,6 +6,8 @@ AudioStream::AudioStream(unsigned int samplerate, unsigned int channels, PaSampl
     _sampleformat(sampleformat),
     _buffersize(buffersize)
 {
+    _sampleratef = (float)_samplerate;
+    _samplerated = (double)_samplerate;
 }
 
 unsigned int AudioStream::getSampleRate() const
@@ -21,4 +23,14 @@ unsigned int AudioStream::getChannelAmount() const
 PaSampleFormat AudioStream::getSampleFormat() const
 {
     return _sampleformat;
+}
+
+float AudioStream::getSampleRateFloat() const
+{
+    return _sampleratef;
+}
+
+double AudioStream::getSampleRateDouble() const
+{
+    return _samplerated;
 }

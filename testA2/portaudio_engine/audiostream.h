@@ -8,10 +8,13 @@ class AudioStream
 {
     friend class ScopedPAContext;
 
-private:
+protected:
     unsigned int        _samplerate, _channels;
     PaSampleFormat      _sampleformat;
     unsigned int        _buffersize;
+
+    float               _sampleratef;
+    double              _samplerated;
 
 public:
     AudioStream(unsigned int samplerate = 44100,
@@ -19,7 +22,10 @@ public:
                 PaSampleFormat sampleformat = paFloat32,
                 unsigned int buffersize = 64);
 
-    unsigned int getSampleRate() const;
+    unsigned int    getSampleRate() const;
+    float           getSampleRateFloat() const;
+    double          getSampleRateDouble() const;
+
     unsigned int getChannelAmount() const;
     PaSampleFormat getSampleFormat() const;
 
