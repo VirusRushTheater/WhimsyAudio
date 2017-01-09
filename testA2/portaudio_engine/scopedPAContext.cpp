@@ -1,63 +1,34 @@
 #include "scopedPAContext.h"
 
-AudioStream::AudioStream()
-{
-    setDefaultConfig();
-}
-
-AudioStream::AudioStream(unsigned int samplerate, unsigned int channels, PaSampleFormat sampleformat, unsigned int buffersize) :
-    _samplerate(samplerate),
-    _channelcount(channels),
-    _sampleformat(sampleformat),
-    _buffersize(buffersize)
-{
-}
-
-bool AudioStream::setDefaultConfig()
-{
-    // Stereo, Float32 samples, with minimum latency.
-    _channelcount =                     2;
-    _sampleformat =                     paFloat32;
-
-    // Default sample rate and buffer size.
-    _samplerate =                       44100;
-    _buffersize =                       64;
-}
-
-// *******************************
-
 ScopedPAContext::ScopedPAContext() :
     _result(Pa_Initialize())
 {
-    // If initialization failed, throws an exception.
+    // Inits PortAudio
     if(_result != paNoError)
         throw whimsycore::Exception(NULL, whimsycore::Exception::PortAudioInitError, Pa_GetErrorText(_result));
 
-    // Use the default output. Most cases it's the one the user wants to use. Otherwise they can use their
-    // OS to change it.
-    _defaultoutput =                    Pa_GetDefaultOutputDevice();
-    if (_defaultoutput == paNoDevice) {
-        throw whimsycore::Exception(NULL, whimsycore::Exception::PortAudioNoDevices, "No default output device.");
-    }
+    // Opens the default output device. If fails, throws an exception.
+    _outputdev =    Pa_GetDefaultOutputDevice();
+    if(_outputdev == paNoDevice)
+        throw whimsycore::Exception(NULL, whimsycore::Exception::PortAudioNoDevices, "No output devices found.");
 
-    _strparams.suggestedLatency =       Pa_GetDeviceInfo(_defaultoutput)->defaultLowOutputLatency;
-    _strparams.hostApiSpecificStreamInfo =  NULL;
+    // Some stream configurations, such as output device and low output latency.
+    memset(&_strpars, 0, sizeof(PaStreamParameters));
+    _strpars.device =                       _outputdev;
+    _strpars.hostApiSpecificStreamInfo =    NULL;
+    _strpars.suggestedLatency =             Pa_GetDeviceInfo(_outputdev)->defaultLowOutputLatency;
+
+    _isplaying =                            false;
+    _stream =                               NULL;
 }
 
 ScopedPAContext::~ScopedPAContext()
 {
+    // Terminates PortAudio
     if(_result == paNoError)
     {
         Pa_Terminate();
     }
-}
-
-void ScopedPAContext::setStream(AudioStream &as)
-{
-    _strparams.channelCount =   as._channelcount;
-    _strparams.sampleFormat =   as._sampleformat;
-
-    _currentstream = &as;
 }
 
 PaError ScopedPAContext::result() const
@@ -65,8 +36,61 @@ PaError ScopedPAContext::result() const
     return _result;
 }
 
-int ScopedPAContext::audioCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags, void *userData)
+void ScopedPAContext::setStream(AudioStream &as)
 {
+    _as = &(as);
+
+    _strpars.channelCount =     as._channels;
+    _strpars.sampleFormat =     as._sampleformat;
+
+    if(_stream != NULL)
+    {
+        stopStream();
+        closeStream();
+    }
+
+    Pa_OpenStream(&_stream, NULL, &_strpars, (double)as._samplerate, paFramesPerBufferUnspecified,
+                  paClipOff, ScopedPAContext::apiCallback, this->_as);
+}
+
+bool ScopedPAContext::startStream(unsigned int timeout_ms)
+{
+    if (_stream == NULL)
+        return false;
+
+    PaError err =   Pa_StartStream(_stream);
+    if(timeout_ms != 0)
+        Pa_Sleep(timeout_ms);
+
+    return (err == paNoError);
+}
+
+bool ScopedPAContext::stopStream()
+{
+    if (_stream == NULL)
+        return false;
+
+    PaError err =   Pa_StopStream( _stream );
+
+    return (err == paNoError);
+}
+
+bool ScopedPAContext::closeStream()
+{
+    if (_stream == NULL)
+        return false;
+
+    PaError err =   Pa_CloseStream(_stream);
+    _stream =       NULL;
+
+    return (err == paNoError);
+}
+
+int ScopedPAContext::apiCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void *userData)
+{
+    AudioStream* current_stream = static_cast<AudioStream*>(userData);
     (void) inputBuffer;
-    return dynamic_cast<AudioStream*>(userData)->audioCallback(outputBuffer, framesPerBuffer, timeInfo, statusFlags);
+
+    // Cast this ScopedPAContext._as as the userData used here.
+    return(current_stream->audioOut(outputBuffer, framesPerBuffer, timeInfo, statusFlags));
 }
