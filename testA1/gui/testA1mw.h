@@ -16,13 +16,13 @@ struct DeviceInfo
     bool        is_default_output;
 };
 
-class TestA1MW : public QWidget
+class TestA3MW : public QWidget
 {
     Q_OBJECT
 
 public:
-    TestA1MW(QWidget* parent = NULL);
-    ~TestA1MW();
+    TestA3MW(QWidget* parent = NULL);
+    ~TestA3MW();
 
     void setPortAudioContext(ScopedPAContext* pactx);
     void getDeviceInfo();

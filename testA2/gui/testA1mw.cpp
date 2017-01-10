@@ -1,6 +1,6 @@
 #include "testA1mw.h"
 
-TestA1MW::TestA1MW(QWidget *parent)
+TestA3MW::TestA3MW(QWidget *parent)
 {
     vl = new QGridLayout();
 
@@ -47,7 +47,7 @@ TestA1MW::TestA1MW(QWidget *parent)
     this->setWindowTitle("Metronome with PortAudio and Qt5");
 }
 
-void TestA1MW::startstopMetronome()
+void TestA3MW::startstopMetronome()
 {
     if(pb1->isChecked())
     {
@@ -61,7 +61,7 @@ void TestA1MW::startstopMetronome()
     }
 }
 
-void TestA1MW::changeBPM(int newbpm)
+void TestA3MW::changeBPM(int newbpm)
 {
     sl1->setValue(newbpm);
     sp1->setValue(newbpm);
@@ -69,12 +69,12 @@ void TestA1MW::changeBPM(int newbpm)
     mtest.changeBPM(newbpm);
 }
 
-void TestA1MW::changeVolume(int percentage)
+void TestA3MW::changeVolume(int percentage)
 {
     mtest.changeVolume((float)percentage / 100.0f );
 }
 
-TestA1MW::~TestA1MW()
+TestA3MW::~TestA3MW()
 {
     _pactx->stopStream();
     _pactx->closeStream();
@@ -87,7 +87,7 @@ TestA1MW::~TestA1MW()
     delete(lb2);
 }
 
-void TestA1MW::setPortAudioContext(ScopedPAContext* pactx)
+void TestA3MW::setPortAudioContext(ScopedPAContext* pactx)
 {
     _pactx = pactx;
     _pactx->setStream(mtest);

@@ -42,3 +42,4 @@ include_directories(${PORTAUDIO_INCLUDE_DIRS})
 # Create our test programs
 add_subdirectory(testA1)
 add_subdirectory(testA2)
+add_subdirectory(testA3)

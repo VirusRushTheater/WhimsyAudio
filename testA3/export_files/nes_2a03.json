@@ -1,0 +1,71 @@
+{
+"name": "NES-2A03",
+        "channels":
+        [
+            {
+            "name": "Square 1",
+            "id": "SQ01",
+            "type": "synth-square",
+            "fields":
+            [
+                {"name": "Note", "id": "NOTE", "maxvalue": "B-9", "type": "note"},
+                {"name": "Patch", "id": "PAT", "maxvalue": 255, "type": "byte"},
+                {"name": "Volume", "id": "VOL", "maxvalue": 15, "type": "byte"},
+                {"name": "Duty cycle", "id": "DC", "maxvalue": 3, "type": "nibble"},
+                {"name": "Effects", "id": "FX", "type": "effect"}
+            ]
+            },
+            
+            {
+            "name": "Square 2",
+            "id": "SQ02",
+            "type": "synth-square",
+            "fields":
+            [
+                {"name": "Note", "id": "NOTE", "maxvalue": "B-9", "type": "note"},
+                {"name": "Patch", "id": "PAT", "maxvalue": 255, "type": "byte"},
+                {"name": "Volume", "id": "VOL", "maxvalue": 15, "type": "byte"},
+                {"name": "Duty cycle", "id": "DC", "maxvalue": 3, "type": "nibble"},
+                {"name": "Effects", "id": "FX", "type": "effect"}
+            ]
+            },
+            
+            {
+            "name": "Triangle",
+            "id": "TRI",
+            "type": "synth-triangle",
+            "fields":
+            [
+                {"name": "Note", "id": "NOTE", "maxvalue": "B-9", "type": "note"},
+                {"name": "Patch", "id": "PAT", "maxvalue": 255, "type": "byte"},
+                {"name": "Volume", "id": "VOL", "maxvalue": 1, "type": "nibble"},
+                {"name": "Effects", "id": "FX", "type": "effect"}
+            ]
+            },
+            
+            {
+            "name": "Noise",
+            "id": "NOI",
+            "type": "synth-noise",
+            "fields":
+            [
+                {"name": "Frequency", "id": "FREQ", "maxvalue": "15", "type": "nibble"},
+                {"name": "Patch", "id": "PAT", "maxvalue": 255, "type": "byte"},
+                {"name": "Volume", "id": "VOL", "maxvalue": 15, "type": "byte"},
+                {"name": "Mode", "id": "MODE", "maxvalue": 1, "type": "nibble"},
+                {"name": "Effects", "id": "FX", "type": "effect"}
+            ]
+            },
+            
+            {
+            "name": "DPCM",
+            "id": "DPCM",
+            "type": "sampled-dpcm",
+            "fields":
+            [
+                {"name": "Patch", "id": "PAT", "maxvalue": 255, "type": "byte"},
+                {"name": "Effects", "id": "FX", "type": "effect"}
+            ]
+            },
+        ]
+}

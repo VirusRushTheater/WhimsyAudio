@@ -1,6 +1,6 @@
 #include "testA1mw.h"
 
-TestA1MW::TestA1MW(QWidget *parent)
+TestA3MW::TestA3MW(QWidget *parent)
 {
     textfield =     new QTextEdit("Test for humble purposes. No console is needed anymore.");
     mainlayout =    new QGridLayout();
@@ -21,24 +21,24 @@ TestA1MW::TestA1MW(QWidget *parent)
     QObject::connect(refreshbutton, SIGNAL(clicked(bool)), this, SLOT(refreshDevices()));
 }
 
-TestA1MW::~TestA1MW()
+TestA3MW::~TestA3MW()
 {
     delete textfield;
     delete pushbutton;
     delete mainlayout;
 }
 
-void TestA1MW::setPortAudioContext(ScopedPAContext* pactx)
+void TestA3MW::setPortAudioContext(ScopedPAContext* pactx)
 {
     _pactx = pactx;
 }
 
-void TestA1MW::streamButton()
+void TestA3MW::streamButton()
 {
     qDebug() << "Button pressed!";
 }
 
-void TestA1MW::getDeviceInfo()
+void TestA3MW::getDeviceInfo()
 {
     int                     devcount, devindex;
     DeviceInfo              devtemp;
@@ -99,13 +99,13 @@ void TestA1MW::getDeviceInfo()
 
 }
 
-void TestA1MW::updateDetails(int i)
+void TestA3MW::updateDetails(int i)
 {
     if(i < _devices.count())
         textfield->setText(_devices.at(i).details);
 }
 
-void TestA1MW::refreshDevices()
+void TestA3MW::refreshDevices()
 {
     devicecombo->clear();
 }

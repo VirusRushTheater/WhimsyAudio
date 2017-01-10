@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 {
     QApplication        testa1_app(argc, argv);
     ScopedPAContext     pactx;
-    TestA1MW            testwidget;
+    TestA3MW            testwidget;
 
     testwidget.setPortAudioContext(&pactx);
     testwidget.show();
