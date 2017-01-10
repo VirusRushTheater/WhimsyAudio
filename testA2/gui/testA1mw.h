@@ -36,5 +36,5 @@ private:
     QPushButton*    pb1;
     QLabel*         lb1, *lb2;
 
-    MetronomeTest*  mtest;
+    MetronomeTest   mtest;
 };

@@ -39,8 +39,12 @@ TestA1MW::TestA1MW(QWidget *parent)
     QObject::connect(pb1, SIGNAL(clicked(bool)), this, SLOT(startstopMetronome()));
     QObject::connect(sp1, SIGNAL(valueChanged(int)), this, SLOT(changeBPM(int)));
     QObject::connect(sl1, SIGNAL(sliderMoved(int)), this, SLOT(changeBPM(int)));
-    QObject::connect(sl2, SIGNAL(sliderMoved(int)), this, SLOT(changeVolume(int)));
+    QObject::connect(sl1, SIGNAL(valueChanged(int)), this, SLOT(changeBPM(int)));
 
+    QObject::connect(sl2, SIGNAL(sliderMoved(int)), this, SLOT(changeVolume(int)));
+    QObject::connect(sl2, SIGNAL(valueChanged(int)), this, SLOT(changeVolume(int)));
+
+    this->setWindowTitle("Metronome with PortAudio and Qt5");
 }
 
 void TestA1MW::startstopMetronome()
@@ -48,10 +52,12 @@ void TestA1MW::startstopMetronome()
     if(pb1->isChecked())
     {
         pb1->setText("Stop!");
+        _pactx->startStream();
     }
     else
     {
         pb1->setText("Start!");
+        _pactx->stopStream();
     }
 }
 
@@ -59,15 +65,20 @@ void TestA1MW::changeBPM(int newbpm)
 {
     sl1->setValue(newbpm);
     sp1->setValue(newbpm);
+
+    mtest.changeBPM(newbpm);
 }
 
 void TestA1MW::changeVolume(int percentage)
 {
-
+    mtest.changeVolume((float)percentage / 100.0f );
 }
 
 TestA1MW::~TestA1MW()
 {
+    _pactx->stopStream();
+    _pactx->closeStream();
+
     delete(vl);
     delete(sl1);
     delete(sl2);
@@ -79,4 +90,5 @@ TestA1MW::~TestA1MW()
 void TestA1MW::setPortAudioContext(ScopedPAContext* pactx)
 {
     _pactx = pactx;
+    _pactx->setStream(mtest);
 }
